@@ -16,20 +16,6 @@ inputs:
     default: false
     description: "delete git tag"
     required: true
-  slack_webhook_url:
-    description: "slack_webhook_url"
-    required: true
-  github-token:
-    description: "github-token"
-    required: true
-
-outputs:
-  current-job-name:
-    description: "The URI of the ECR Private or ECR Public registry."
-    value: ${{ env.ECR_REGISTRY }}
-  current-job-status:
-    description: "The URI of the ECR Private or ECR Public registry."
-    value: ${{ env.ECR_REGISTRY }}
 
 runs:
   using: 'composite'
@@ -55,4 +41,4 @@ runs:
         status: ${{ inputs.workflow-job-status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
       env:
-        SLACK_WEBHOOK_URL: ${{ inputs.slack_webhook_url }} # required
+        SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }} # required
