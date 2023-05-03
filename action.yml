@@ -21,12 +21,6 @@ runs:
   using: 'composite'
   steps:
 
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        token: ${{ env.github-token }}
-
     - name: Send custom JSON data to Slack workflow
       id: slack
       uses: slackapi/slack-github-action@v1.23.0
@@ -49,13 +43,29 @@ runs:
         SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
-    - name: Send Slack
+    - name: Send Slack Success
+      if: ${{ inputs.workflow-job-status }} == success
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ inputs.workflow-job-status }}
+        fields: repo,message,commit,author,eventName,workflow,job # selectable (default: repo,message)
+      env:
+        SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }} # required
+
+    - name: Send Slack Failure
+      if: ${{ inputs.workflow-job-status }} == failure
       uses: 8398a7/action-slack@v3
       with:
         status: ${{ inputs.workflow-job-status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
       env:
         SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }} # required
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+        token: ${{ env.github-token }}
 
     - name: delete git tag
       if: ${{ inputs.trigger-delete-git-tag }} == true
