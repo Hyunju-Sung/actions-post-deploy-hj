@@ -9,6 +9,9 @@ inputs:
   workflow-job-status:
     description: "actions(job) status"
     required: true
+  tag:
+    description: "delete git tag"
+    required: true
   trigger-delete-git-tag:
     default: false
     description: "delete git tag"
@@ -31,7 +34,8 @@ runs:
     - name: delete git tag
       if: ${{ inputs.trigger-delete-git-tag == true }}
       run: |
-        echo "delete git tag"
+        git tag -d ${{ inputs.tag }}
+        git push --delete origin ${{ inputs.tag }}
       shell: bash
 
     - name: Send Slack
