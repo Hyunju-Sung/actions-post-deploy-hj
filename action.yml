@@ -46,14 +46,13 @@ runs:
             ]
           }
       env:
-        SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }}
+        SLACK_WEBHOOK_URL: ${{ env.SLACK_WEBHOOK_URL }}
         SLACK_WEBHOOK_TYPE: INCOMING_WEBHOOK
 
     - name: Send Slack
       uses: 8398a7/action-slack@v3
       with:
-        job_name: ${{ inputs.workflow-job-name }}
-        status: ${{ inputs.workflow-job-status }}
+        status: ${{ job.status }}
         fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
       env:
         SLACK_WEBHOOK_URL: ${{ env.slack_webhook_url }} # required
