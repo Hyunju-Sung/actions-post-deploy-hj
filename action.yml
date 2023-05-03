@@ -31,6 +31,10 @@ outputs:
 runs:
   using: 'composite'
   steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
     - name: delete git tag
       if: ${{ inputs.trigger-delete-git-tag }} == true
       run: |
