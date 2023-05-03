@@ -32,7 +32,7 @@ runs:
       if: ${{ inputs.trigger-delete-git-tag == true }}
       run: |
         echo "delete git tag"
-      bash: shell
+      shell: bash
 
     - name: Send Slack
       uses: 8398a7/action-slack@v3
